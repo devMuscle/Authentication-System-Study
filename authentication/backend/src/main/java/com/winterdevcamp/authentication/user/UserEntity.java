@@ -1,5 +1,6 @@
 package com.winterdevcamp.authentication.user;
 
+import com.winterdevcamp.authentication.authentication.AuthenticationEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -29,4 +30,6 @@ public class UserEntity {
     @Column(length=20)
     private String email;
 
+    @OneToOne(mappedBy = "user")
+    private AuthenticationEntity token;
 }
