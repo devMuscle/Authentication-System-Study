@@ -1,6 +1,6 @@
 package com.winterdevcamp.authentication.user;
 
-import com.winterdevcamp.authentication.user.dto.SignUpReqDto;
+import com.winterdevcamp.authentication.dto.SignUpReqDto;
 import com.winterdevcamp.authentication.user.mapper.UserMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

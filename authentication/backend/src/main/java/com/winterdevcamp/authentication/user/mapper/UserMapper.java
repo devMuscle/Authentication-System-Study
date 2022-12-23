@@ -1,7 +1,7 @@
 package com.winterdevcamp.authentication.user.mapper;
 
 import com.winterdevcamp.authentication.user.UserEntity;
-import com.winterdevcamp.authentication.user.dto.SignUpReqDto;
+import com.winterdevcamp.authentication.dto.SignUpReqDto;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 
