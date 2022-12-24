@@ -51,7 +51,7 @@ public class JwtTokenProvider {
                 .compact();
     }
 
-    public String getSubject(String token) {
+    public String getSubject(String token) throws Exception{
         Claims claims = Jwts.parserBuilder()
                 .setSigningKey(DatatypeConverter.parseBase64Binary(SECRET_KEY))
                 .build()
