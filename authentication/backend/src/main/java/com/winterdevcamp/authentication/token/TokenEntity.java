@@ -21,7 +21,7 @@ public class TokenEntity {
     @Column(length = 500)
     private String refreshToken;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.REMOVE)
     @JoinColumn(name="userId")
     private UserEntity user;
 }
