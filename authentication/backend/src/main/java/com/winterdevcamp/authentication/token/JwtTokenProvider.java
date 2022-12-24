@@ -2,6 +2,7 @@ package com.winterdevcamp.authentication.token;
 
 import com.winterdevcamp.authentication.user.UserEntity;
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Header;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import jakarta.xml.bind.DatatypeConverter;
@@ -26,7 +27,9 @@ public class JwtTokenProvider {
         Key signingKey = new SecretKeySpec(secretKeyBytes, signatureAlgorithm.getJcaName());
 
         return Jwts.builder()
+                .setHeaderParam(Header.TYPE, Header.JWT_TYPE)
                 .setSubject(AccessTokenSub)
+                .setHeaderParam(Header.TYPE, Header.JWT_TYPE)
                 .claim("loginId", userEntity.getLoginId())
                 .claim("id",userEntity.getUserId() )
                 .claim("nickName", userEntity.getNickName())
@@ -41,6 +44,7 @@ public class JwtTokenProvider {
         Key signingKey = new SecretKeySpec(secretKeyBytes, signatureAlgorithm.getJcaName());
 
         return Jwts.builder()
+                .setHeaderParam(Header.TYPE, Header.JWT_TYPE)
                 .setSubject(RefreshTokenSub)
                 .signWith(signingKey, signatureAlgorithm)
                 .setExpiration(new Date((System.currentTimeMillis()+RefreshTokenExpTime)))
