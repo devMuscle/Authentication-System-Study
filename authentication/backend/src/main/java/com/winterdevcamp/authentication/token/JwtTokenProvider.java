@@ -16,8 +16,6 @@ import java.util.Date;
 public class JwtTokenProvider {
 
     private static final String SECRET_KEY = "secrettxvcvsadvsdvsdvsdvsdgvbsdfbdfbfdbdfvsdvsdvsdvsddvsdvsdsdvdsb";
-    private final String AccessTokenSub = "AccessToken";
-    private final String RefreshTokenSub = "RefreshToken";
     private final long AccessTokenExpTime = 30*60*1000L;
     private final long RefreshTokenExpTime = 7*24*60*60*1000L;
 
@@ -28,9 +26,8 @@ public class JwtTokenProvider {
 
         return Jwts.builder()
                 .setHeaderParam(Header.TYPE, Header.JWT_TYPE)
-                .setSubject(AccessTokenSub)
+                .setSubject(userEntity.getLoginId())
                 .setHeaderParam(Header.TYPE, Header.JWT_TYPE)
-                .claim("loginId", userEntity.getLoginId())
                 .claim("id",userEntity.getUserId() )
                 .claim("nickName", userEntity.getNickName())
                 .signWith(signingKey, signatureAlgorithm)
@@ -38,14 +35,14 @@ public class JwtTokenProvider {
                 .compact();
     }
 
-    public String createRefreshToken() {
+    public String createRefreshToken(UserEntity userEntity) {
         SignatureAlgorithm signatureAlgorithm = SignatureAlgorithm.HS256;
         byte[] secretKeyBytes = DatatypeConverter.parseBase64Binary(SECRET_KEY);
         Key signingKey = new SecretKeySpec(secretKeyBytes, signatureAlgorithm.getJcaName());
 
         return Jwts.builder()
+                .setSubject(userEntity.getLoginId())
                 .setHeaderParam(Header.TYPE, Header.JWT_TYPE)
-                .setSubject(RefreshTokenSub)
                 .signWith(signingKey, signatureAlgorithm)
                 .setExpiration(new Date((System.currentTimeMillis()+RefreshTokenExpTime)))
                 .compact();
