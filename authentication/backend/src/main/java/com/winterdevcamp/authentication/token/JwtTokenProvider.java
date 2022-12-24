@@ -16,10 +16,8 @@ import java.util.Date;
 public class JwtTokenProvider {
 
     private static final String SECRET_KEY = "secrettxvcvsadvsdvsdvsdvsdgvbsdfbdfbfdbdfvsdvsdvsdvsddvsdvsdsdvdsb";
-    private final String AccessTokenSub = "AccessToken";
-    private final String RefreshTokenSub = "RefreshToken";
-    private final long AccessTokenExpTime = 30*60*1000L;
-    private final long RefreshTokenExpTime = 7*24*60*60*1000L;
+    private final long ACCESS_Token_EXP_TIME = 30*60*1000L;
+    private final long REFRESH_TOKEN_EXP_TIME = 7*24*60*60*1000L;
 
     public String createAccessToken(UserEntity userEntity) {
         SignatureAlgorithm signatureAlgorithm = SignatureAlgorithm.HS256;
@@ -28,26 +26,25 @@ public class JwtTokenProvider {
 
         return Jwts.builder()
                 .setHeaderParam(Header.TYPE, Header.JWT_TYPE)
-                .setSubject(AccessTokenSub)
+                .setSubject(userEntity.getLoginId())
                 .setHeaderParam(Header.TYPE, Header.JWT_TYPE)
-                .claim("loginId", userEntity.getLoginId())
-                .claim("id",userEntity.getUserId() )
+                .claim("userId",userEntity.getUserId() )
                 .claim("nickName", userEntity.getNickName())
                 .signWith(signingKey, signatureAlgorithm)
-                .setExpiration(new Date((System.currentTimeMillis()+AccessTokenExpTime)))
+                .setExpiration(new Date((System.currentTimeMillis()+ACCESS_Token_EXP_TIME)))
                 .compact();
     }
 
-    public String createRefreshToken() {
+    public String createRefreshToken(UserEntity userEntity) {
         SignatureAlgorithm signatureAlgorithm = SignatureAlgorithm.HS256;
         byte[] secretKeyBytes = DatatypeConverter.parseBase64Binary(SECRET_KEY);
         Key signingKey = new SecretKeySpec(secretKeyBytes, signatureAlgorithm.getJcaName());
 
         return Jwts.builder()
+                .setSubject(userEntity.getLoginId())
                 .setHeaderParam(Header.TYPE, Header.JWT_TYPE)
-                .setSubject(RefreshTokenSub)
                 .signWith(signingKey, signatureAlgorithm)
-                .setExpiration(new Date((System.currentTimeMillis()+RefreshTokenExpTime)))
+                .setExpiration(new Date((System.currentTimeMillis()+REFRESH_TOKEN_EXP_TIME)))
                 .compact();
     }
 
@@ -59,5 +56,17 @@ public class JwtTokenProvider {
                 .getBody();
 
         return claims.getSubject();
+    }
+
+    public Long getUserId(String token) throws NumberFormatException{
+        Claims claims = Jwts.parserBuilder()
+                .setSigningKey(DatatypeConverter.parseBase64Binary(SECRET_KEY))
+                .build()
+                .parseClaimsJws(token)
+                .getBody();
+
+        Long userId = Long.valueOf(String.valueOf(claims.get("userId")));
+
+        return userId;
     }
 }

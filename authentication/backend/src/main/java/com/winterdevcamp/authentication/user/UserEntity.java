@@ -28,6 +28,6 @@ public class UserEntity {
     @Column(length=20)
     private String email;
 
-    @OneToOne(mappedBy = "user")
+    @OneToOne(mappedBy = "user", cascade = CascadeType.REMOVE)
     private TokenEntity token;
 }

@@ -8,8 +8,12 @@ import com.winterdevcamp.authentication.token.TokenRepository;
 import com.winterdevcamp.authentication.user.UserEntity;
 import com.winterdevcamp.authentication.user.UserRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+@Slf4j
 @RequiredArgsConstructor
 @Service
 public class AuthenticationService {
@@ -24,7 +28,7 @@ public class AuthenticationService {
                 .orElseThrow(()->new Exception("해당되는 회원이 없습니다"));
 
         String accessToken = jwtTokenProvider.createAccessToken(userEntity);
-        String refreshToken = jwtTokenProvider.createRefreshToken();
+        String refreshToken = jwtTokenProvider.createRefreshToken(userEntity);
 
         TokenEntity authentication = TokenEntity.builder()
                 .user(userEntity)
