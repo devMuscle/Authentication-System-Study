@@ -1,4 +1,4 @@
-package com.winterdevcamp.authentication.authentication;
+package com.winterdevcamp.authentication.token;
 
 import com.winterdevcamp.authentication.user.UserEntity;
 import jakarta.persistence.*;
@@ -11,12 +11,12 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 @Getter
-@Entity(name="Authentication")
-public class AuthenticationEntity {
+@Entity(name="Token")
+public class TokenEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long authenticationId;
+    private Long tokenId;
 
     @Column(length = 500)
     private String refreshToken;
