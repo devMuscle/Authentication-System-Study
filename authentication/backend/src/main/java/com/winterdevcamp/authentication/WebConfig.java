@@ -1,16 +1,17 @@
 package com.winterdevcamp.authentication;
 
 import com.winterdevcamp.authentication.token.JwtInterceptor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
+@RequiredArgsConstructor
 @Configuration
 public class WebConfig implements WebMvcConfigurer {
 
-    @Autowired
-    private JwtInterceptor jwtInterceptor;
+    private final JwtInterceptor jwtInterceptor;
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
