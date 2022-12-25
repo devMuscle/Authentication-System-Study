@@ -30,6 +30,7 @@ public class JwtTokenProvider {
                 .setHeaderParam(Header.TYPE, Header.JWT_TYPE)
                 .claim("userId",userEntity.getUserId())
                 .claim("nickName", userEntity.getNickName())
+                .claim("authority", userEntity.getAuthority())
                 .signWith(signingKey, signatureAlgorithm)
                 .setExpiration(new Date((System.currentTimeMillis()+ACCESS_Token_EXP_TIME)))
                 .compact();
