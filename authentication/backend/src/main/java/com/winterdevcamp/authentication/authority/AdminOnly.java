@@ -1,4 +1,4 @@
-package com.winterdevcamp.authentication.admin;
+package com.winterdevcamp.authentication.authority;
 
 import java.lang.annotation.*;
 
