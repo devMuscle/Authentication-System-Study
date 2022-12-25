@@ -35,4 +35,12 @@ public class UserEntity {
 
     @OneToOne(mappedBy = "user", cascade = CascadeType.REMOVE)
     private TokenEntity token;
+
+    public void updateAuthority() {
+        if(this.authority.equals(Authority.ADMIN)) {
+            this.authority=Authority.USER;
+        }else {
+            this.authority=Authority.ADMIN;
+        }
+    }
 }
