@@ -28,7 +28,7 @@ public class JwtTokenProvider {
                 .setHeaderParam(Header.TYPE, Header.JWT_TYPE)
                 .setSubject(userEntity.getLoginId())
                 .setHeaderParam(Header.TYPE, Header.JWT_TYPE)
-                .claim("userId",userEntity.getUserId() )
+                .claim("userId",userEntity.getUserId())
                 .claim("nickName", userEntity.getNickName())
                 .signWith(signingKey, signatureAlgorithm)
                 .setExpiration(new Date((System.currentTimeMillis()+ACCESS_Token_EXP_TIME)))
@@ -42,6 +42,7 @@ public class JwtTokenProvider {
 
         return Jwts.builder()
                 .setSubject(userEntity.getLoginId())
+                .claim("userId",userEntity.getUserId())
                 .setHeaderParam(Header.TYPE, Header.JWT_TYPE)
                 .signWith(signingKey, signatureAlgorithm)
                 .setExpiration(new Date((System.currentTimeMillis()+REFRESH_TOKEN_EXP_TIME)))
