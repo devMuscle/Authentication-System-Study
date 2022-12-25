@@ -71,4 +71,14 @@ public class JwtTokenProvider {
 
         return userId;
     }
+
+    public String getAuthority(String accessToken) throws NumberFormatException{
+        Claims claims = Jwts.parserBuilder()
+                .setSigningKey(DatatypeConverter.parseBase64Binary(SECRET_KEY))
+                .build()
+                .parseClaimsJws(accessToken)
+                .getBody();
+
+        return String.valueOf(claims.get("authority"));
+    }
 }
