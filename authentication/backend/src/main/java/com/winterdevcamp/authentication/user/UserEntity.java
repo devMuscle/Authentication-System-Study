@@ -1,5 +1,6 @@
 package com.winterdevcamp.authentication.user;
 
+import com.winterdevcamp.authentication.enums.Authority;
 import com.winterdevcamp.authentication.token.TokenEntity;
 import jakarta.persistence.*;
 import lombok.*;
@@ -28,6 +29,18 @@ public class UserEntity {
     @Column(length=20)
     private String email;
 
+    @Enumerated(EnumType.STRING)
+    @Builder.Default
+    private Authority authority = Authority.USER;
+
     @OneToOne(mappedBy = "user", cascade = CascadeType.REMOVE)
     private TokenEntity token;
+
+    public void updateAuthority() {
+        if(this.authority.equals(Authority.ADMIN)) {
+            this.authority=Authority.USER;
+        }else {
+            this.authority=Authority.ADMIN;
+        }
+    }
 }

@@ -30,6 +30,7 @@ public class JwtTokenProvider {
                 .setHeaderParam(Header.TYPE, Header.JWT_TYPE)
                 .claim("userId",userEntity.getUserId())
                 .claim("nickName", userEntity.getNickName())
+                .claim("authority", userEntity.getAuthority())
                 .signWith(signingKey, signatureAlgorithm)
                 .setExpiration(new Date((System.currentTimeMillis()+ACCESS_Token_EXP_TIME)))
                 .compact();
@@ -69,5 +70,15 @@ public class JwtTokenProvider {
         Long userId = Long.valueOf(String.valueOf(claims.get("userId")));
 
         return userId;
+    }
+
+    public String getAuthority(String accessToken) throws NumberFormatException{
+        Claims claims = Jwts.parserBuilder()
+                .setSigningKey(DatatypeConverter.parseBase64Binary(SECRET_KEY))
+                .build()
+                .parseClaimsJws(accessToken)
+                .getBody();
+
+        return String.valueOf(claims.get("authority"));
     }
 }
