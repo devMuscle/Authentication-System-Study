@@ -44,4 +44,25 @@ public class AuthenticationService {
 
         return tokenDto;
     }
+
+    public void validateRefreshToken(String refreshToken, TokenEntity tokenEntity) throws Exception {
+        if(!refreshToken.equals(tokenEntity.getRefreshToken())) {
+            throw new RuntimeException("토큰의 값이 일치하지 않습니다.");
+        }
+    }
+
+    public TokenDto reissue(String refreshToken) throws Exception {
+        TokenEntity tokenEntity = tokenRepository.findByUserId(jwtTokenProvider.getUserId(refreshToken))
+                .orElseThrow(()->new RuntimeException("로그아웃한 회원입니다"));
+
+        validateRefreshToken(refreshToken, tokenEntity);
+
+        String accessToken = jwtTokenProvider.createAccessToken(tokenEntity.getUser());
+
+        TokenDto tokenDto = TokenDto.builder()
+                .AccessToken(accessToken)
+                .build();
+
+        return tokenDto;
+    }
 }
