@@ -12,4 +12,8 @@ public class SignUpReqDto {
     private String password;
     private String nickName;
     private String email;
+
+    public void encryptPw(String encryptedPw) {
+        this.password=encryptedPw;
+    }
 }
