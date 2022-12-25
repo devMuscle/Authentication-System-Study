@@ -2,6 +2,7 @@ package com.winterdevcamp.authentication.user;
 
 import com.winterdevcamp.authentication.dto.SignUpReqDto;
 import com.winterdevcamp.authentication.dto.ViewUserResDto;
+import com.winterdevcamp.authentication.encryption.EncryptionUtil;
 import com.winterdevcamp.authentication.token.JwtTokenProvider;
 import com.winterdevcamp.authentication.user.mapper.UserMapper;
 import lombok.RequiredArgsConstructor;
@@ -9,6 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,10 +19,17 @@ import java.util.List;
 @Service
 public class UserService {
 
+    private final EncryptionUtil encryptionUtil;
     private final UserRepository userRepository;
     private final JwtTokenProvider jwtTokenProvider;
 
     public void signUp(SignUpReqDto signUpReqDto) {
+        try {
+            signUpReqDto.encryptPw(encryptionUtil.encryptBySHA245(signUpReqDto.getPassword()));
+        }catch (NoSuchAlgorithmException e) {
+            log.info(e.toString());
+        }
+
         UserEntity userEntity = UserMapper.INSTANCE.SignUpReqDtoToEntity(signUpReqDto);
 
         userRepository.save(userEntity);
